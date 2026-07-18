@@ -27,12 +27,10 @@ Four models were used for feature extraction:
 - **Baseline** (ResNet34) - A standard computer vision backbone
 
 ### 3. Feature Aggregation
-Two primary methods were implemented to convert patch-level features to slide-level representations:
-- **Averaging Aggregation**: Simple Mean averaging of all patch features from a slide
-- **Clustering Aggregation**: 
-  - Clustering patches into 2 or 3 clusters
-  - Averaging features within each cluster
-  - Concatenating the cluster-level features to form the slide-level representation
+Patch-level features are converted to slide-level representations using three approaches:
+- **Averaging**: mean-pool all patch features from a slide into one vector.
+- **Clustering**: k-means each slide's patches into 2-3 clusters, then concatenate the cluster centroids into the slide-level representation.
+- **Tissue-type stratification**: classify each patch into one of nine tissue types with a classifier pretrained on the Zenodo CRC-100K dataset, average features within each type, then select the two most predictive types (MUC, TUM) as the slide-level representation.
 
 ### 4. Adaptation by Classification
 Four different classifiers were trained and evaluated:
@@ -44,7 +42,7 @@ Four different classifiers were trained and evaluated:
 ## Repository Structure
 
 ```
-lab-calm-colonmsi-fm/
+colonmsi-fm/
 ├── data_preprocessing/           # Scripts for WSI processing and patch extraction
 ├── env files/                    # Environment configuration
 ├── Feature_Extraction_Using_FM/  # Feature extraction using foundation models
@@ -56,12 +54,14 @@ lab-calm-colonmsi-fm/
     └── Clustering/               # Models and results for clustering aggregation
 ```
 
+Two additional baselines evaluated alongside these methods live in separate repositories: [kat-baseline-tcga-wsi](https://github.com/muhammadaamirgulzar/kat-baseline-tcga-wsi) / [kat-baseline-zenodo-patches](https://github.com/muhammadaamirgulzar/kat-baseline-zenodo-patches) (Kernel Attention Transformer) and [vib-baseline-wsi-finetuning](https://github.com/muhammadaamirgulzar/vib-baseline-wsi-finetuning) (Variational Information Bottleneck fine-tuning).
+
 ## Installation and Setup
 
 1. Clone this repository
 ```bash
-git clone https://github.com/lab-calm/ColonMSI-FM
-cd lab-calm-colonmsi-fm
+git clone https://github.com/muhammadaamirgulzar/colonmsi-fm
+cd colonmsi-fm
 ```
 
 2. Install the required dependencies
